@@ -24,7 +24,11 @@ class ViewController: UIViewController {
         self.output.text = "1"
     }
     @IBAction func button2pushed(_ sender: Any) {
-        self.output.text = "2"
+        self.output.text = self.output.text! + "2"
+    }
+    
+    func handleNumberInput(_ number:Double) {
+        
     }
     
     override func viewDidLoad() {
