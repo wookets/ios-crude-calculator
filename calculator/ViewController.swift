@@ -10,25 +10,53 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var output: UILabel!
+    @IBOutlet weak var longOutput: UILabel!
+    @IBOutlet weak var currentOutput: UILabel!
     
-    @IBOutlet weak var button0: UIButton!
-    @IBOutlet weak var button1: UIButton!
-    @IBOutlet weak var button2: UIButton!
+    var previousNumber:Double = 0
+    var currentOperator:String = ""
     
-    
-    @IBAction func button0pushed(_ sender: Any) {
-        self.output.text = "0"
-    }
-    @IBAction func button1pushed(_ sender: Any) {
-        self.output.text = "1"
-    }
-    @IBAction func button2pushed(_ sender: Any) {
-        self.output.text = self.output.text! + "2"
+    @IBAction func numberPushed(_ sender: UIButton) {
+        if currentOutput.text == "0" && sender.currentTitle != "." {
+            currentOutput.text = ""
+        }
+        currentOutput.text! += sender.currentTitle!
     }
     
-    func handleNumberInput(_ number:Double) {
-        
+    @IBAction func operatorPushed(_ sender: UIButton) {
+        if currentOutput.text == "" {
+            return
+        }
+        currentOperator = sender.currentTitle!
+        // send currentOutput to longOutput with operator
+        longOutput.text! += "\(currentOutput.text!) \(currentOperator) "
+        previousNumber = Double(currentOutput.text!)!
+        currentOutput.text = ""//currentOperator
+    }
+    
+    @IBAction func equalsPushed(_ sender:UIButton) {
+        if currentOutput.text == "" {
+            return
+        }
+        longOutput.text! += "\(currentOutput.text!) ="
+        let currentNumber = Double(currentOutput.text!)!
+        switch currentOperator {
+        case "+":
+            currentOutput.text = String(previousNumber + currentNumber)
+        case "-":
+            currentOutput.text = String(previousNumber - currentNumber)
+        case "X":
+            currentOutput.text = String(previousNumber * currentNumber)
+        case "/":
+            currentOutput.text = String(previousNumber / currentNumber)
+        default:
+            return
+        }
+    }
+    
+    @IBAction func clearPushed(_ sender: UIButton) {
+        currentOutput.text = ""
+        longOutput.text = ""
     }
     
     override func viewDidLoad() {
